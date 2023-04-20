@@ -1,0 +1,999 @@
+******************************************************************Ex-1 : change Font Size and Color*********************************************************************
+Main Activity. Java 
+package com.example.fontapplication;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+
+
+import android.graphics.Color;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+
+public class MainActivity extends AppCompatActivity {
+   int ch=1;
+   float font=30;
+
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+       final Button b = (Button) findViewById(R.id.button1);
+       final TextView t = (TextView) findViewById(R.id.textView1);
+
+
+       final LinearLayout I=(LinearLayout) findViewById(R.id.rl);
+       b.setOnClickListener(new View.OnClickListener() {
+           @Override
+
+
+           public void onClick(View v) {
+               t.setTextSize(font);
+               font=font+5;
+               if (font==50)
+                   font=20;
+           }
+       });
+
+
+
+
+       final Button b2 = (Button) findViewById(R.id.button2);
+       b2.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               switch (ch) {
+                   case 1:
+                       t.setTextColor(Color.RED);
+                       break;
+                   case 2:
+                       t.setTextColor(Color.GREEN);
+                       break;
+                   case 3:
+                       t.setTextColor(Color.BLUE);
+                       break;
+                   case 4:
+                       t.setTextColor(Color.CYAN);
+                       break;
+                   case 5:
+                       t.setTextColor(Color.YELLOW);
+                       break;
+                   case 6:
+                       t.setTextColor(Color.MAGENTA);
+                       break;
+               }
+               ch++;
+               if(ch==7)
+                   ch=1;
+           }});
+
+
+
+
+
+   }
+}
+
+
+
+
+Activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity"
+   android:orientation="vertical"
+   android:layout_gravity="center"
+   android:id="@+id/rl"
+   >
+
+
+
+
+   <TextView
+       android:id="@+id/textView1"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:text="TextView"
+       tools:layout_editor_absoluteX="77dp"
+       tools:layout_editor_absoluteY="42dp" />
+
+
+   <Button
+       android:id="@+id/button1"
+       android:layout_width="160dp"
+       android:layout_height="34dp"
+       android:text="Font Size"
+       tools:layout_editor_absoluteX="66dp"
+       tools:layout_editor_absoluteY="75dp" />
+
+
+   <Button
+       android:id="@+id/button2"
+       android:layout_width="227dp"
+       android:layout_height="40dp"
+       android:text="Font Color"
+       tools:layout_editor_absoluteX="67dp"
+       tools:layout_editor_absoluteY="123dp" />
+
+
+</LinearLayout>
+
+
+
+
+******************************************************Ex-2 Layout Managers and Event Listeners***********************************************************************
+
+
+
+MainActivity.java
+package com.example.exno2;
+ 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+ 
+public class MainActivity extends AppCompatActivity {
+ 
+    //Defining the Views
+    EditText e1,e2;
+    Button bt;
+    Spinner s;
+    //Data for populating in Spinner
+    String [] dept_array={"CSE","ECE","IT","Mech","Civil"};
+    String name,reg,dept;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        //Referring the Views
+        e1= (EditText) findViewById(R.id.editText);
+        e2= (EditText) findViewById(R.id.editText2);
+        bt= (Button) findViewById(R.id.button);
+        s= (Spinner) findViewById(R.id.spinner);
+        //Creating Adapter for Spinner for adapting the data from array to Spinner
+        ArrayAdapter adapter= new ArrayAdapter(MainActivity.this,android.R.layout.simple_spinner_item,dept_array);
+        s.setAdapter(adapter);
+        //Creating Listener for Button
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Getting the Values from Views(Edittext & Spinner)
+                name=e1.getText().toString();
+                reg=e2.getText().toString();
+                dept=s.getSelectedItem().toString();
+                //Intent For Navigating to Second Activity
+               Intent i = new Intent(MainActivity.this,SecondActivity.class);
+                //For Passing the Values to Second Activity
+                i.putExtra("name_key", name);
+                i.putExtra("reg_key",reg);
+                i.putExtra("dept_key", dept);
+ 
+                startActivity(i);
+ 
+            }
+        });
+    }
+}
+
+
+Code for SecondActivity.java:
+package com.example.exno2;
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.widget.TextView;
+ 
+public class SecondActivity extends AppCompatActivity {
+    TextView t1,t2,t3;
+    String name,reg,dept;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_second);
+        t1= (TextView) findViewById(R.id.textView1);
+        t2= (TextView) findViewById(R.id.textView2);
+        t3= (TextView) findViewById(R.id.textView3);
+        //Getting the Intent
+        Intent i = getIntent();
+ //Getting the Values from First Activity using the Intent received
+        name=i.getStringExtra("name_key");
+        reg=i.getStringExtra("reg_key");
+        dept=i.getStringExtra("dept_key");
+        //Setting the Values to Intent
+        t1.setText(name);
+        t2.setText(reg);
+        t3.setText(dept);
+ 
+    }
+}
+	
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+ 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:text="Details Form"
+            android:textSize="25sp"
+            android:gravity="center"/>
+    </LinearLayout>
+ 
+    <GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="200dp"
+        android:columnCount="2"
+        android:rowCount="3">
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:text="Name"
+            android:textSize="20sp"
+            android:gravity="center"/>
+ 
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:ems="10"/>
+ 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:text="Reg.No"
+            android:textSize="20sp"
+            android:gravity="center"/>
+ 
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:inputType="number"
+            android:ems="10"/>
+ 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="2"
+            android:layout_column="0"
+            android:text="Dept"
+            android:textSize="20sp"
+            android:gravity="center"/>
+ 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:spinnerMode="dropdown"/>
+ 
+    </GridLayout>
+ 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="150dp"
+        android:text="Submit"/>
+ 
+</RelativeLayout>
+
+Activity_second.xml:
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.devang.exno2.SecondActivity"
+    android:orientation="vertical"
+    android:gravity="center">
+ 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="New Text"
+        android:textSize="30sp"/>
+ 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="New Text"
+        android:textSize="30sp"/>
+ 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="New Text"
+        android:textSize="30sp"/>
+ 
+</LinearLayout>
+
+
+
+***************************************Ex-3: Develop an android application to accept and display personal details as a message*******************************************
+
+
+
+activity_main.xml
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:padding="10dp"
+    android:gravity="center">
+
+
+    <TextView android:id="@+id/tvInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Personal Information of Student"
+        android:textSize="20sp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/holo_red_light"/>
+
+
+    <EditText android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter you name"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/tvInfo"/>
+
+
+    <EditText android:id="@+id/dob"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Date of Birth"
+        android:ems="10"
+        android:inputType="date"
+        android:textSize="18sp"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="25dp"/>
+
+
+    <EditText android:id="@+id/city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter your City"
+        android:ems="10"
+        android:inputType="textCapCharacters"
+        android:textSize="18sp"
+        android:layout_below="@+id/dob"
+        android:layout_marginTop="25dp"/>
+
+
+    <EditText android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Email ID"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:textSize="18sp"
+        android:layout_below="@+id/city"
+        android:layout_marginTop="25dp"/>
+
+
+    <EditText android:id="@+id/contact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Contact number"
+        android:ems="10"
+        android:inputType="date"
+        android:textSize="18sp"
+        android:layout_below="@+id/email"
+        android:layout_marginTop="25dp"/>
+
+
+    <Button android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/contact"
+        android:layout_marginTop="50dp"
+        android:text="Submit"
+        android:textSize="18sp"
+        android:onClick="displayData"/>
+</RelativeLayout>
+
+
+MainActivity.java
+
+
+package com.example.infoapp;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+public class MainActivity extends AppCompatActivity {
+
+
+    EditText name, dob, city, email, contact;
+    Button submit;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+
+        name = findViewById(R.id.name);
+        dob = findViewById(R.id.dob);
+        city = findViewById(R.id.city);
+        email = findViewById(R.id.email);
+        contact = findViewById(R.id.contact);
+        submit = findViewById(R.id.btnSubmit);
+
+
+        submit.setOnClickListener(new View.OnClickListener() {
+
+
+            @Override
+            public void onClick(View v) {
+
+
+                String n = name.getText().toString();
+                String d = dob.getText().toString();
+                String ci = city.getText().toString();
+                String e = email.getText().toString();
+                String c = contact.getText().toString();
+
+
+                if(n.isEmpty() || d.isEmpty() || ci.isEmpty() || e.isEmpty() || c.isEmpty())
+                {
+      Toast.makeText(getApplicationContext(), "Enter all data", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+      Toast.makeText(getApplicationContext(), n + "\n" + d + "\n" + ci + "\n" + e + "\n" + c, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+}
+
+
+
+************************************************************Ex-4 : Login Screen with Validation************************************************************************
+
+
+
+MainActivity.java
+package com.ex4;
+
+import android.app.Activity;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+
+public class MainActivity extends Activity  {
+   Button b1,b2;
+   EditText ed1,ed2;
+
+   TextView tx1;
+   int counter = 3;
+
+   @Override
+   protected void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      setContentView(R.layout.activity_main);
+
+      b1 = (Button)findViewById(R.id.button);
+      ed1 = (EditText)findViewById(R.id.editText);
+      ed2 = (EditText)findViewById(R.id.editText2);
+
+      b2 = (Button)findViewById(R.id.button2);
+      tx1 = (TextView)findViewById(R.id.textView3);
+      tx1.setVisibility(View.GONE);
+
+      b1.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            if(ed1.getText().toString().equals("admin") &&
+               ed2.getText().toString().equals("admin")) {
+                  Toast.makeText(getApplicationContext(),
+                     "Redirecting...",Toast.LENGTH_SHORT).show();
+               }else{
+                  Toast.makeText(getApplicationContext(), "Wrong 
+                     Credentials",Toast.LENGTH_SHORT).show();
+
+                  tx1.setVisibility(View.VISIBLE);
+                  tx1.setBackgroundColor(Color.RED);
+                  counter--;
+                  tx1.setText(Integer.toString(counter));
+
+                  if (counter == 0) {
+                     b1.setEnabled(false);
+                  }
+               }
+         }
+      });
+
+      b2.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            finish();
+         }
+      });
+   }
+Activity_main.xml
+<?xml version = "1.0" encoding = "utf-8"?>
+<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+   xmlns:tools = "http://schemas.android.com/tools" android:layout_width="match_parent"
+android:layout_height = "match_parent" 
+android:paddingLeft= "@dimen/activity_horizontal_margin"
+android:paddingRight = "@dimen/activity_horizontal_margin"
+android:paddingTop = "@dimen/activity_vertical_margin"
+android:paddingBottom = "@dimen/activity_vertical_margin" tools:context = ".MainActivity">
+   
+   <TextView android:text = "Login" android:layout_width="wrap_content"
+      android:layout_height = "wrap_content"
+      android:id = "@+id/textview"
+      android:textSize = "35dp"
+      android:layout_alignParentTop = "true"
+      android:layout_centerHorizontal = "true" />
+      
+   <TextView
+      android:layout_width = "wrap_content"
+      android:layout_height = "wrap_content"
+      android:text = "Tutorials point"
+      android:id = "@+id/textView"
+      android:layout_below = "@+id/textview"
+      android:layout_centerHorizontal = "true"
+      android:textColor = "#ff7aff24"
+      android:textSize = "35dp" />
+      
+   <EditText
+      android:layout_width = "wrap_content"
+      android:layout_height = "wrap_content"
+      android:id = "@+id/editText"
+      android:hint = "Enter Name"
+      android:focusable = "true"
+      android:textColorHighlight = "#ff7eff15"
+      android:textColorHint = "#ffff25e6"
+      android:layout_marginTop = "46dp"
+      android:layout_below = "@+id/imageView"
+      android:layout_alignParentLeft = "true"
+      android:layout_alignParentStart = "true"
+      android:layout_alignParentRight = "true"
+      android:layout_alignParentEnd = "true" />
+      
+   <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/imageView"
+      android:src="@drawable/abc"
+      android:layout_below="@+id/textView"
+      android:layout_centerHorizontal="true" />
+      
+   <EditText
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:inputType="textPassword"
+      android:ems="10"
+      android:id="@+id/editText2"
+      android:layout_below="@+id/editText"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_alignRight="@+id/editText"
+      android:layout_alignEnd="@+id/editText"
+      android:textColorHint="#ffff299f"
+      android:hint="Password" />
+      
+   <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Attempts Left:"
+      android:id="@+id/textView2"
+      android:layout_below="@+id/editText2"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:textSize="25dp" />
+      
+   <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="New Text"
+      android:id="@+id/textView3"
+      android:layout_alignTop="@+id/textView2"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentEnd="true"
+      android:layout_alignBottom="@+id/textView2"
+      android:layout_toEndOf="@+id/textview"
+      android:textSize="25dp"
+      android:layout_toRightOf="@+id/textview" />
+      
+   <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="login"
+      android:id="@+id/button"
+      android:layout_alignParentBottom="true"
+      android:layout_toLeftOf="@+id/textview"
+      android:layout_toStartOf="@+id/textview" />
+      
+   <Button
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Cancel"
+      android:id="@+id/button2"
+      android:layout_alignParentBottom="true"
+      android:layout_toRightOf="@+id/textview"
+      android:layout_toEndOf="@+id/textview" />
+
+</RelativeLayout>
+
+
+
+
+**************************************************************Ex -  5 : Change the Background Color******************************************************************
+
+
+
+Main Activity.java
+
+package com.example.helloworld;
+import android.graphics.Color;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+
+public class MainActivity extends  AppCompatActivity
+{
+    int ch=1;
+    @Override
+    protected  void  onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    final Button b = (Button) findViewById(R.id.button2);
+    final RelativeLayout I=(RelativeLayout) findViewById(R.id.rl);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (ch) {
+                        case 1:
+                            I.setBackgroundColor(Color.RED);
+                            break;
+                        case 2:
+                            I.setBackgroundColor(Color.GREEN);
+                            break;
+                        case 3:
+                            I. setBackgroundColor(Color.BLUE);
+                            break;
+                        case 4:
+                            I.setBackgroundColor(Color.CYAN);
+                            break;
+                        case 5:
+                            I.setBackgroundColor(Color.YELLOW);
+                            break;
+                        case 6:
+                            I.setBackgroundColor(Color.MAGENTA);
+                            break;
+                    }
+                    ch++;
+                    if(ch==7)
+                        ch=1;
+                    }
+                });
+            }
+    }
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:app="http://schemas.android.com/apk/res-auto"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   tools:context=".MainActivity"
+android:id="@+id/rl">
+
+
+   
+   <Button
+       android:id="@+id/button2"
+       android:layout_width="160dp"
+       android:layout_height="34dp"
+       android:text="Font Size"
+       tools:layout_editor_absoluteX="66dp"
+       tools:layout_editor_absoluteY="75dp" />
+
+
+   
+
+
+</RelativeLayout>
+
+
+
+********************************************************************************Ex-8 Calculator*************************************************************************
+
+
+
+Activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:gravity= "center"
+    >
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Enter number 1"
+        android:textSize="18sp" />
+    <EditText
+        android:id="@+id/first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview1"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="false"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="number" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first"
+        android:layout_centerHorizontal="true"
+        android:text="Enter Number 2"
+        android:textSize="18sp" />
+    <EditText
+        android:id="@+id/second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView2"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="number" />
+
+
+    <Button
+        android:id="@+id/buttonadd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/second"
+        android:layout_marginTop="65dp"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/buttonsub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/second"
+        android:layout_marginTop="202dp"
+        android:text="-" />
+
+    <Button
+        android:id="@+id/buttonmul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/second"
+        android:layout_marginTop="271dp"
+        android:text="*" />
+
+    <Button
+        android:id="@+id/buttondiv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/second"
+        android:layout_marginTop="340dp"
+        android:text="/" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonadd"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp" />
+</RelativeLayout>
+
+MainActivity.java
+package com.example.calculator;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+    EditText firstnum,secondnum;
+    TextView r;
+    Button bt,bts,btm,btd;
+    double a,b,c;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        firstnum=(EditText) findViewById(R.id.first);
+        secondnum=(EditText) findViewById(R.id.second);
+        bt=(Button) findViewById(R.id.buttonadd);
+        bts=(Button) findViewById(R.id.buttonsub);
+        btm=(Button) findViewById(R.id.buttonmul);
+        btd=(Button) findViewById(R.id.buttondiv);
+        r=(TextView) findViewById(R.id.result);
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a=Double.parseDouble(firstnum.getText().toString());
+                b=Double.parseDouble(secondnum.getText().toString());
+                c=a+b;
+                r.setText("Sum="+c);
+            }
+        });
+        bts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a=Double.parseDouble(firstnum.getText().toString());
+                b=Double.parseDouble(secondnum.getText().toString());
+                c=a-b;
+                r.setText("Subtraction="+c);
+            }
+        });
+
+        btm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a=Double.parseDouble(firstnum.getText().toString());
+                b=Double.parseDouble(secondnum.getText().toString());
+                c=a*b;
+                r.setText("Multipliocation="+c);
+            }
+        });
+
+        btd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a=Double.parseDouble(firstnum.getText().toString());
+                b=Double.parseDouble(secondnum.getText().toString());
+                c=a/b;
+                r.setText("Division="+c);
+            }
+        });
+
+    }
+}
+
+
+**********************************************************************convert dna to rna**********************************************************************************
+
+#! usr/bin/perl
+$DNA= "ATTGCTAACCGAT";
+$RNA = $DNA;
+$RNA=~s/T/U/g;
+print"The given DNA Sequence is  :";
+print$DNA;
+print"The DNA to RNA sequence is:";
+print$RNA;
+exit;
+
+
+*********************************************************************codon************************************************************************************************
+
+#!usr|bin|perl
+print "Enter the sequence";
+$seq = <STDIN>;
+chomp($seq);
+$seqlen=length($seq);
+$startcod = 0;
+$stopcod =0;
+$startcodon="AUG";
+$stopcodon = "UAG";
+@mycodons = unpack("(A3)",$seq);
+    for($a=0;$a<$seqlen;$a++)
+    {
+        if ($codons[$a]eq $startcodon){
+            $startcod++;
+        }
+        if($codons[$a]eq $stopcodon){
+            $stopcod++;
+        }
+    }
+    print"Total no of codon in $started \n";
+    print"Total no of stop codon in $stoped \n";
+
+
+
+*********************************************************************protein sequence*************************************************************************************
+
+#!usr/bin/perl-w
+$proteinfilename="Filename-pop";
+open (PROTEINFILE,$proteinfilename);
+@ protein_array=<PROTEIN FILE>;
+print @protein_array;
+close PROTEINFILE;
+exit;
+
